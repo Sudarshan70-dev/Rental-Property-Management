@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 import TextInput from "@/components/textInput";
 import Button from "@/components/Button";
 import Link from "next/link";
-import "../../style.css";
+import "@/app/style.css";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 
