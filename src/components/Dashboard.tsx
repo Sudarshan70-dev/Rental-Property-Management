@@ -6,11 +6,19 @@ import dayjs from 'dayjs';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 
+type Property = {
+  id: string;
+  address: string;
+  rent: number;
+  rent_due_day: number;
+};
+
+
 export default function Dashboard() {
   const [totalProperties, setTotalProperties] = useState(0);
   const [rentCollected, setRentCollected] = useState(0);
   const [rentDueCount, setRentDueCount] = useState(0);
-  const [upcomingDueList, setUpcomingDueList] = useState<any[]>([]);
+  const [upcomingDueList, setUpcomingDueList] = useState<Property[]>([]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {

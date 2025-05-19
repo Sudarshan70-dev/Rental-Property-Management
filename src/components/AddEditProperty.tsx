@@ -1,23 +1,12 @@
 "use client";
 import TextInput from "@/components/textInput";
 import Grid from "@mui/material/Grid";
-import { ChangeEvent, useState } from "react";
+import {  useState } from "react";
 import Button from "@/components/Button";
 import { supabase } from "../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
-type PropertyFormData = {
-  address: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  rent: string;
-  dueDate: string;
-  postal_code?:string;
-  no_of_unit?:number;
-  rent_due_day?:number;
-};
+
 
 export default function AddEditProperty(props = {}, edit = false) {
   const initialData = props?.initialData;

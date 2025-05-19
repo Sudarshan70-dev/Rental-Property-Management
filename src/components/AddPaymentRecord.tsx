@@ -11,13 +11,27 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { useRouter } from "next/navigation";
 
+
+type Property = {
+  id: string;
+  address: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+  rent: number;
+  rent_due_day: number;
+  no_of_unit: number;
+};
+
+
 export default function AddPaymentRecord() {
     const router = useRouter();
 
   const [paymentDate, setPaymentDate] = useState<Dayjs | null>(dayjs());
   const [paymentAmt, setPaymentAmt] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
-  const [properties, setProperties] = useState<any[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>("");
 
   useEffect(() => {
