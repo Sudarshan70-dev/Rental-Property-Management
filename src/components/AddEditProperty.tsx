@@ -1,17 +1,34 @@
 "use client";
 import TextInput from "@/components/textInput";
 import Grid from "@mui/material/Grid";
-import {  useState } from "react";
+import { useState } from "react";
 import Button from "@/components/Button";
 import { supabase } from "../../lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
+type PropertyFormData = {
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  rent: string;
+  postal_code?: string;
+  no_of_unit?: number;
+  rent_due_day?: number;
+  id?: string;
+};
 
+interface AddEditPropertyProps {
+  initialData: PropertyFormData;
+  edit?: boolean;
+}
 
-export default function AddEditProperty(props = {}, edit = false) {
-  const initialData = props?.initialData;
-    const router = useRouter();
-  
+export default function AddEditProperty({
+  initialData,
+  edit = false,
+}: AddEditPropertyProps) {
+  const router = useRouter();
+
   console.log("initial data is -=--> ", initialData);
 
   const [street, setStreet] = useState(initialData?.address || "");
@@ -19,9 +36,9 @@ export default function AddEditProperty(props = {}, edit = false) {
   const [state, setState] = useState(initialData?.state || "");
   const [postalCode, setPostalCode] = useState(initialData?.postal_code || "");
   const [country, setCountry] = useState(initialData?.country || "");
-  const [noOfUnit, setNoOfUnit] = useState(initialData?.no_of_unit || 0);
-  const [monthlyRent, setMonthlyRent] = useState(initialData?.rent || 0);
-  const [dueDay, setDueDay] = useState(initialData?.rent_due_day || 0);
+  const [noOfUnit, setNoOfUnit] = useState(initialData?.no_of_unit || "0");
+  const [monthlyRent, setMonthlyRent] = useState(initialData?.rent || "0");
+  const [dueDay, setDueDay] = useState(initialData?.rent_due_day || "0");
 
   const onChangeStreet = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStreet(e.target.value);
@@ -34,7 +51,7 @@ export default function AddEditProperty(props = {}, edit = false) {
   };
   const onChangePostalCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const value = input.replace(/[^0-9]/g,'');
+    const value = input.replace(/[^0-9]/g, "");
     setPostalCode(value);
   };
   const onChangeCountry = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,32 +59,31 @@ export default function AddEditProperty(props = {}, edit = false) {
   };
   const onChangeNoOfUnit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const value = input.replace(/[^0-9]/g,'');
+    const value = input.replace(/[^0-9]/g, "");
     setNoOfUnit(value);
   };
   const onChangeMonthlyRent = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const value = input.replace(/[^0-9]/g,'');
+    const value = input.replace(/[^0-9]/g, "");
     setMonthlyRent(value);
   };
   const onChangeDueDay = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const value = input.replace(/[^0-9]/g,'');
+    const value = input.replace(/[^0-9]/g, "");
     setDueDay(value);
   };
 
   const onSubmit = async () => {
     // Validate form
-    console.log("submit called");
     if (
       street === "" ||
       city === "" ||
       state === "" ||
       postalCode === "" ||
       country === "" ||
-      monthlyRent <= 0 ||
-      dueDay < 1 ||
-      noOfUnit <= 0
+      Number(monthlyRent) <= 0 ||
+      Number(dueDay) < 1 ||
+      Number(noOfUnit) <= 0
     ) {
       alert("Please fill all fields correctly.");
       return;
@@ -103,7 +119,7 @@ export default function AddEditProperty(props = {}, edit = false) {
         alert("Failed to save property: " + error.message);
       } else {
         alert("Property added successfully!");
-      router.push("/property");
+        router.push("/property");
         onClear();
       }
     }
@@ -139,9 +155,9 @@ export default function AddEditProperty(props = {}, edit = false) {
     setState("");
     setPostalCode("");
     setCountry("");
-    setMonthlyRent(0);
-    setDueDay(0);
-    setNoOfUnit(0);
+    setMonthlyRent("0");
+    setDueDay("0");
+    setNoOfUnit("0");
   };
 
   return (
