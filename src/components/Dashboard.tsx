@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 import dayjs from 'dayjs';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';

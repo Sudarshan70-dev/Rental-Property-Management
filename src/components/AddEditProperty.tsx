@@ -3,7 +3,7 @@ import TextInput from "@/components/textInput";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import Button from "@/components/Button";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 type PropertyFormData = {
