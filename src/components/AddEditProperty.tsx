@@ -19,7 +19,7 @@ type PropertyFormData = {
 };
 
 interface AddEditPropertyProps {
-  initialData: PropertyFormData;
+  initialData?: PropertyFormData | undefined;
   edit?: boolean;
 }
 
@@ -138,7 +138,7 @@ export default function AddEditProperty({
         rent_due_day: dueDay,
         no_of_unit: noOfUnit,
       })
-      .eq("id", initialData.id); // use initialData.id for the record being updated
+      .eq("id", initialData?.id); // use initialData.id for the record being updated
 
     if (!error) {
       alert("Property updated!");
