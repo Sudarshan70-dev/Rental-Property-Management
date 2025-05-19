@@ -26,7 +26,7 @@ export default function TextInput({
     <div className="mb-4">
       <TextField
         name={name}
-        label={name}
+        label={label}
         type={type}
         placeholder={placeholder}
         value={value}

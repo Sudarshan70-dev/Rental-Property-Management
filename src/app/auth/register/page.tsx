@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 
 
 import { useState } from "react";
-export default function registerPage() {
+export default function RegisterPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNo, setMobileNo] = useState("");
@@ -83,7 +83,6 @@ if (sessionError || !session || !session.user) {
 
 
   const validation = () => {
-  let hasError = false;
 
   if (fullName === "") {
     alert("Full name is required.");

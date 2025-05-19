@@ -18,11 +18,11 @@ export default function LoginPage() {
 
   const [error, setError] = useState("");
 
-  const onChangeUserName = (e: any) => {
+  const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
   };
 
-  const onChangePassword = (e: any) => {
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
@@ -38,7 +38,7 @@ export default function LoginPage() {
       email: userName,
       password: password,
     });
-    console.log("Error in login ---> ",error)
+    console.log("Error in login ---> ", error);
     if (error) {
       setError(error.message);
     } else {
@@ -89,7 +89,7 @@ export default function LoginPage() {
             />
 
             <p className="mt-4">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link href="/auth/register" className="text-blue-500 underline">
                 Register here
               </Link>

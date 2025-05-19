@@ -4,13 +4,35 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '../../../../../../lib/supabaseClient';
-// import { supabase } from '../../../lib/supabaseClient';
 import AddEditProperty from '@/components/AddEditProperty';
+
+type PropertyFormData = {
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  rent: string;
+  postal_code?:string;
+  no_of_unit?:number;
+  rent_due_day?:number;
+};
 
 export default function EditPropertyPage() {
     console.log("edit property called")
   const [loading, setLoading] = useState(true);
-  const [property, setProperty] = useState<any>(null);
+const defaultProperty: PropertyFormData = {
+  address: '',
+  city: '',
+  state: '',
+  country: '',
+  rent: '',
+  postal_code: '',
+  no_of_unit: 0,
+  rent_due_day: 1,
+};
+
+const [property, setProperty] = useState<PropertyFormData>(defaultProperty);
+
 
   const { id } = useParams();
   console.log("id is ---> ",id)

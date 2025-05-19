@@ -14,6 +14,9 @@ type PropertyFormData = {
   country: string;
   rent: string;
   dueDate: string;
+  postal_code?:string;
+  no_of_unit?:number;
+  rent_due_day?:number;
 };
 
 export default function AddEditProperty(props = {}, edit = false) {
@@ -31,34 +34,34 @@ export default function AddEditProperty(props = {}, edit = false) {
   const [monthlyRent, setMonthlyRent] = useState(initialData?.rent || 0);
   const [dueDay, setDueDay] = useState(initialData?.rent_due_day || 0);
 
-  const onChangeStreet = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeStreet = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStreet(e.target.value);
   };
-  const onChangeCity = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeCity = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCity(e.target.value);
   };
-  const onChangeState = (e: any) => {
+  const onChangeState = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState(e.target.value);
   };
-  const onChangePostalCode = (e: any) => {
+  const onChangePostalCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const value = input.replace(/[^0-9]/g,'');
     setPostalCode(value);
   };
-  const onChangeCountry = (e: any) => {
+  const onChangeCountry = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCountry(e.target.value);
   };
-  const onChangeNoOfUnit = (e: any) => {
+  const onChangeNoOfUnit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const value = input.replace(/[^0-9]/g,'');
     setNoOfUnit(value);
   };
-  const onChangeMonthlyRent = (e: any) => {
+  const onChangeMonthlyRent = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const value = input.replace(/[^0-9]/g,'');
     setMonthlyRent(value);
   };
-  const onChangeDueDay = (e: any) => {
+  const onChangeDueDay = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const value = input.replace(/[^0-9]/g,'');
     setDueDay(value);
@@ -90,7 +93,7 @@ export default function AddEditProperty(props = {}, edit = false) {
       alert("User not authenticated.");
       return;
     }
-    if (props.edit) {
+    if (edit) {
       onUpdate();
     } else {
       const { error } = await supabase.from("properties").insert([
