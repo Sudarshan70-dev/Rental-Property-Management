@@ -15,13 +15,7 @@ import { useRouter } from "next/navigation";
 type Property = {
   id: string;
   address: string;
-  city: string;
-  state: string;
-  postal_code: string;
-  country: string;
   rent: number;
-  rent_due_day: number;
-  no_of_unit: number;
 };
 
 
