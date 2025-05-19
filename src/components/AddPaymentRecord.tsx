@@ -109,7 +109,7 @@ const propertySelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     }
   };
 
-  const onChangePaymentAmt = (e) => {
+  const onChangePaymentAmt = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const value = input.replace(/[^0-9]/g, "");
     setPaymentAmt(value);
