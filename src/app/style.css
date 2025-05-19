@@ -2,7 +2,17 @@
     font-weight: 800;
 }
 
-.navbar{
-    height:30px;
-    background-color: rgb(21, 21, 58);
+.navbarColor{
+    background-color: #141a39;
+}
+
+.containtArea{
+    height:70%;
+}
+
+.dashboardCard{
+    border: solid #141a39 2px;
+    border-radius: 16px;
+    height: 150px;
+    width: 150px;
 }

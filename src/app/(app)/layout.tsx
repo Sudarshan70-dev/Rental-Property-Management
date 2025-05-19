@@ -1,16 +1,16 @@
 // src/app/main-layout/layout.tsx
 
 import TopNavbar from '@/components/TopNavbar';
-import RightSidebar from '@/components/RightSidebar';
+import Sidebar from '@/components/RightSidebar';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div >
+    <div className="min-h-screen flex flex-col bg-gray-100" >
       
       <TopNavbar />
-      <div >
-        <main >{children}</main>
-        <RightSidebar />
+      <div className="flex flex-1">
+        <Sidebar/>
+        <main className="flex-1 p-6">{children}</main>
       </div>
     </div>
   );

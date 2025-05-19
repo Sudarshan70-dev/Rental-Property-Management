@@ -8,7 +8,7 @@ interface Props {
   name: string;
   type?: string;
   placeholder?: string;
-  value: string;
+  value: string |number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   id: string;
 }

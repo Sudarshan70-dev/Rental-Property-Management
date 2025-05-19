@@ -7,6 +7,8 @@ import Link from "next/link";
 import "../../style.css";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import { supabase } from "../../../../lib/supabaseClient";
+import { useRouter } from 'next/navigation';
 
 
 import { useState } from "react";
@@ -15,10 +17,6 @@ export default function registerPage() {
   const [email, setEmail] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const [password, setPassword] = useState("");
-  const [fullNameErr, setFullNameErr] = useState("");
-  const [emailErr, setEmailErr] = useState("");
-  const [mobileNoErr, setMobileNoErr] = useState("");
-  const [passwordErr, setPasswordErr] = useState("");
 
   const onChangeName = (value:string) => {
     setFullName(value);
@@ -28,41 +26,88 @@ export default function registerPage() {
   };
   const onChangeMobileNo = (value:string) => {
     setMobileNo(value);
-    setMobileNoErr("");
   };
   const onChangePassword = (value:string) => {
     setPassword(value);
-    setPasswordErr("");
   };
-  const onClick = () => {
-    console.log("button click");
-    validation();
-    if(fullNameErr ==="" || emailErr ==="" || mobileNoErr ==="" || passwordErr ===""){
-        const alertMsg = `${fullNameErr} 
-        ${emailErr} 
-        ${mobileNoErr} 
-        ${passwordErr}`
-        alert(alertMsg);
-        return
-    }
-  };
+  const router = useRouter();
 
+const onClick = async () => {
+  const hasError = validation();
+  if (hasError)return
 
-  const validation =()=>{
-    if(fullName ==="" && mobileNo ==="" && email ==="" && password ===""){
-        
-        return;
-    }else{
-        if(mobileNo.length !== 10){
-            setMobileNoErr("Mobile number should be 10 digits.")
-            return;
-        }
-        if(password.length < 8){
-            setPasswordErr("Password should be minimum 8 digits.");
-            return;
-        }
-    }
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.log("Error in SignUp--> ",error);
+    alert(error.message);
+    return;
   }
+
+  const {
+  data: { session },
+  error: sessionError,
+} = await supabase.auth.getSession();
+
+if (sessionError || !session || !session.user) {
+  alert("User session not available after registration.");
+  return;
+}
+
+  const user = data?.user;
+  console.log("user Data --> ",user)
+  if (user) {
+    // Insert profile into user_profiles table
+    const { error: profileError } = await supabase.from('user_profiles').insert([
+      {
+        id: user.id,
+        full_name: fullName,
+        mobile_no: mobileNo,
+      },
+    ]);
+
+    console.log("Profile Error --> ",profileError);
+    if (profileError) {
+      alert(profileError.message);
+      return;
+    }
+
+    alert('Registration successful!');
+    router.push('/dashboard');
+  }
+};
+
+
+
+  const validation = () => {
+  let hasError = false;
+
+  if (fullName === "") {
+    alert("Full name is required.");
+    return true;
+  }
+
+  if (email === "") {
+    alert("Email is required.");
+    return true;
+  } 
+
+  if (mobileNo.length !== 10) {
+    alert("Mobile number should be 10 digits.");
+    return true;
+  } 
+
+  if (password.length < 8) {
+    alert("Password should be at least 8 characters.");
+    return true;
+  } 
+
+  return false;
+};
+
 
 
   return (
@@ -91,7 +136,7 @@ export default function registerPage() {
         <div>
           <TextInput
             label="Mobile No"
-            name="Mobile No"
+            name="Mobile Number"
             type="text"
             placeholder="Mobile Number"
             value={mobileNo}
@@ -143,3 +188,9 @@ export default function registerPage() {
     </div>
   );
 }
+
+
+// d6e64126-0147-4452-83d8-b7b9588964ac
+
+// insert into user_profiles (id, full_name, mobile_no)
+// values ('d6e64126-0147-4452-83d8-b7b9588964ac', 'Sudarshan Gadekar', '7083589566');
