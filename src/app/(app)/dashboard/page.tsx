@@ -1,4 +1,3 @@
-// app/(app)/properties/create/page.tsx
 "use client"
 // import Dashboard from '@/components/Dashboard';
 import dynamic from 'next/dynamic';

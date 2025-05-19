@@ -1,6 +1,3 @@
-// app/(app)/properties/create/page.tsx
-
-// import AddEditProperty from '@/components/AddEditProperty';
 "use client"
 import dynamic from 'next/dynamic';
 import LoginPageSkeleton from '@/components/LoginPageSkelaton';

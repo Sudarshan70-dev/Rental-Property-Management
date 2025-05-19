@@ -1,5 +1,3 @@
-
-// import EditPropertyPage from '@/components/EditProperty';
 "use client"
 import dynamic from 'next/dynamic';
 import LoginPageSkeleton from '@/components/LoginPageSkelaton';
