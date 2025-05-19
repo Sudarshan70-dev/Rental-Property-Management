@@ -14,6 +14,7 @@ type PaymentRecord = {
   };
 };
 
+
 export default function PaymentHistory() {
   const [payments, setPayments] = useState<PaymentRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,14 +28,14 @@ export default function PaymentHistory() {
 
       const { data, error } = await supabase
   .from('rent_payments')
-  .select('id, amount, mode, payment_date, property(address)')
+  .select('id, amount, mode, payment_date, property: property(address)')
   .order('payment_date', { ascending: false });
 
 
 
       console.log("data is ---> ",data)
       console.log("error is ---> ",error)
-      if (!error && data) setPayments(data);
+      if (!error && data) setPayments(data as any);
       setLoading(false);
     };
 
