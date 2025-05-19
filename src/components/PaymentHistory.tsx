@@ -35,6 +35,7 @@ export default function PaymentHistory() {
 
       console.log("data is ---> ",data)
       console.log("error is ---> ",error)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!error && data) setPayments(data as any);
       setLoading(false);
     };
