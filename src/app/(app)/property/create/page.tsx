@@ -1,7 +1,14 @@
 // app/(app)/properties/create/page.tsx
 
-import AddEditProperty from '@/components/AddEditProperty';
+// import AddEditProperty from '@/components/AddEditProperty';
+"use client"
+import dynamic from 'next/dynamic';
+import LoginPageSkeleton from '@/components/LoginPageSkelaton';
 
+const AddEditProperty = dynamic(() => import('@/components/AddEditProperty'), {
+  ssr:false,
+  loading: () => <LoginPageSkeleton />,
+});
 export default function CreatePropertyPage() {
   return (
     <div className="p-6">

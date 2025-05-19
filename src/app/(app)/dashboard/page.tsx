@@ -1,7 +1,13 @@
 // app/(app)/properties/create/page.tsx
+"use client"
+// import Dashboard from '@/components/Dashboard';
+import dynamic from 'next/dynamic';
+import LoginPageSkeleton from '@/components/LoginPageSkelaton';
 
-import Dashboard from '@/components/Dashboard';
-
+const Dashboard = dynamic(() => import('@/components/Dashboard'), {
+  ssr:false,
+  loading: () => <LoginPageSkeleton />,
+});
 export default function DashboardPage() {
   return (
     <div className="p-6">
