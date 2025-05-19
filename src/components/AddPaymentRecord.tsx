@@ -118,7 +118,7 @@ const propertySelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
   return (
     <div className="bg-white p-6 rounded-xl shadow-md space-y-6 w-full max-w-5xl">
       <Grid container spacing={2} className="centerDiv">
-        <Grid item xs={6}>
+        <Grid size={6} key="1">
           <label className="block text-sm mb-1 font-medium">
             Select Property
           </label>
@@ -136,7 +136,7 @@ const propertySelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
           </select>
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid size={6} key="2">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label="Payment Date"
@@ -154,7 +154,7 @@ const propertySelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
       </Grid>
 
       <Grid container spacing={2} className="centerDiv">
-        <Grid item xs={6}>
+        <Grid size={6} key="3">
           <TextInput
             label="Amount"
             name="Amount"
@@ -166,7 +166,7 @@ const propertySelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
           />
         </Grid>
 
-        <Grid item xs={6}>
+        <Grid size={6} key="4">
           <TextInput
             label="Payment Mode"
             name="Payment Mode"
