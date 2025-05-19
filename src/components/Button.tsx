@@ -23,6 +23,7 @@ const TextInput: React.FC<TextInputProps> = ({
         onClick={onClick}
         variant={variant}
         color={color}
+        disabled={disable}
       >
         {name}
       </Button>

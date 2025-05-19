@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import { ChangeEvent, useState } from "react";
 import Button from "@/components/Button";
 import { supabase } from "../../lib/supabaseClient";
-
+import { useRouter } from "next/navigation";
 
 type PropertyFormData = {
   address: string;
@@ -16,11 +16,12 @@ type PropertyFormData = {
   dueDate: string;
 };
 
-export default function AddEditProperty(props={}, edit=false) {
-
-  const initialData = props?.initialData
-  console.log("initial data is -=--> ",initialData)
+export default function AddEditProperty(props = {}, edit = false) {
+  const initialData = props?.initialData;
+    const router = useRouter();
   
+  console.log("initial data is -=--> ", initialData);
+
   const [street, setStreet] = useState(initialData?.address || "");
   const [city, setCity] = useState(initialData?.city || "");
   const [state, setState] = useState(initialData?.state || "");
@@ -30,130 +31,130 @@ export default function AddEditProperty(props={}, edit=false) {
   const [monthlyRent, setMonthlyRent] = useState(initialData?.rent || 0);
   const [dueDay, setDueDay] = useState(initialData?.rent_due_day || 0);
 
-  const onChangeStreet = (e:ChangeEvent<HTMLInputElement>) => {
-    setStreet(e.target.value)
+  const onChangeStreet = (e: ChangeEvent<HTMLInputElement>) => {
+    setStreet(e.target.value);
   };
-  const onChangeCity = (e:ChangeEvent<HTMLInputElement>) => {
-    setCity(e.target.value)
+  const onChangeCity = (e: ChangeEvent<HTMLInputElement>) => {
+    setCity(e.target.value);
   };
-  const onChangeState = (e:any) => {
-    setState(e.target.value)
+  const onChangeState = (e: any) => {
+    setState(e.target.value);
   };
-  const onChangePostalCode = (e:any) => {
-    setPostalCode(e.target.value)
+  const onChangePostalCode = (e: any) => {
+    const input = e.target.value;
+    const value = input.replace(/[^0-9]/g,'');
+    setPostalCode(value);
   };
-  const onChangeCountry = (e:any) => {
-    setCountry(e.target.value)
+  const onChangeCountry = (e: any) => {
+    setCountry(e.target.value);
   };
-  const onChangeNoOfUnit = (e:any) => {
-    setNoOfUnit(e.target.value)
+  const onChangeNoOfUnit = (e: any) => {
+    const input = e.target.value;
+    const value = input.replace(/[^0-9]/g,'');
+    setNoOfUnit(value);
   };
-  const onChangeMonthlyRent = (e:any) => {
-    setMonthlyRent(e.target.value)
+  const onChangeMonthlyRent = (e: any) => {
+    const input = e.target.value;
+    const value = input.replace(/[^0-9]/g,'');
+    setMonthlyRent(value);
   };
-  const onChangeDueDay = (e:any) => {
-    setDueDay(e.target.value)
+  const onChangeDueDay = (e: any) => {
+    const input = e.target.value;
+    const value = input.replace(/[^0-9]/g,'');
+    setDueDay(value);
   };
-
-
-
 
   const onSubmit = async () => {
-  // Validate form
-  console.log("submit called")
-  if (
-    street === "" ||
-    city === "" ||
-    state === "" ||
-    postalCode === "" ||
-    country === "" ||
-    monthlyRent <= 0 ||
-    dueDay < 1 ||
-    noOfUnit <= 0
-  ) {
-    alert("Please fill all fields correctly.");
-    return;
-  }
+    // Validate form
+    console.log("submit called");
+    if (
+      street === "" ||
+      city === "" ||
+      state === "" ||
+      postalCode === "" ||
+      country === "" ||
+      monthlyRent <= 0 ||
+      dueDay < 1 ||
+      noOfUnit <= 0
+    ) {
+      alert("Please fill all fields correctly.");
+      return;
+    }
 
-  const {
-    data: { user },
-    error: sessionError,
-  } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: sessionError,
+    } = await supabase.auth.getUser();
 
-  if (sessionError || !user) {
-    alert("User not authenticated.");
-    return;
-  }
- if(props.edit){
-  onUpdate();
- }else{
+    if (sessionError || !user) {
+      alert("User not authenticated.");
+      return;
+    }
+    if (props.edit) {
+      onUpdate();
+    } else {
+      const { error } = await supabase.from("properties").insert([
+        {
+          user_id: user.id,
+          address: street,
+          city,
+          state,
+          postal_code: postalCode,
+          country,
+          rent: monthlyRent,
+          rent_due_day: dueDay,
+          no_of_unit: noOfUnit,
+        },
+      ]);
 
-   const { error } = await supabase.from("properties").insert([
-     {
-       user_id: user.id,
-       address: street,
-       city,
-       state,
-       postal_code: postalCode,
-       country,
-       rent: monthlyRent,
-       rent_due_day: dueDay,
-       no_of_unit: noOfUnit,
-     },
-   ]);
- 
-   
-   if (error) {
-     alert("Failed to save property: " + error.message);
-   } else {
-     alert("Property added successfully!");
-     onClear(); 
-   }
- }
-};
+      if (error) {
+        alert("Failed to save property: " + error.message);
+      } else {
+        alert("Property added successfully!");
+      router.push("/property");
+        onClear();
+      }
+    }
+  };
 
+  const onUpdate = async () => {
+    const { error } = await supabase
+      .from("properties")
+      .update({
+        address: street,
+        city,
+        state,
+        postal_code: postalCode,
+        country,
+        rent: monthlyRent,
+        rent_due_day: dueDay,
+        no_of_unit: noOfUnit,
+      })
+      .eq("id", initialData.id); // use initialData.id for the record being updated
 
-const onUpdate = async () => {
-  const { error } = await supabase
-    .from('properties')
-    .update({
-      address: street,
-      city,
-      state,
-      postal_code: postalCode,
-      country,
-      rent: monthlyRent,
-      rent_due_day: dueDay,
-      no_of_unit: noOfUnit,
-    })
-    .eq('id', initialData.id); // use initialData.id for the record being updated
+    if (!error) {
+      alert("Property updated!");
+      router.push("/property");
+    } else {
+      alert("Error: " + error.message);
+    }
+  };
 
-  if (!error) {
-    alert('Property updated!');
-    router.push('/property');
-  } else {
-    alert('Error: ' + error.message);
-  }
-};
-
-
-  const onClear=()=>{
-    console.log("clear")
-    setStreet("")
-    setCity("")
-    setState("")
+  const onClear = () => {
+    console.log("clear");
+    setStreet("");
+    setCity("");
+    setState("");
     setPostalCode("");
     setCountry("");
     setMonthlyRent(0);
     setDueDay(0);
     setNoOfUnit(0);
-  }
-
+  };
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-md space-y-6 w-full max-w-5xl">
       <Grid container spacing={2} className="centerDiv">
-        
         <Grid size={6}>
           <TextInput
             label="Address"
@@ -161,7 +162,7 @@ const onUpdate = async () => {
             type="text"
             placeholder="Address"
             value={street}
-            onChange={(e)=>onChangeStreet(e)}
+            onChange={(e) => onChangeStreet(e)}
             id="Address"
           />
         </Grid>
@@ -172,12 +173,12 @@ const onUpdate = async () => {
             type="text"
             placeholder="City"
             value={city}
-            onChange={(e)=>onChangeCity(e)}
+            onChange={(e) => onChangeCity(e)}
             id="City"
           />
         </Grid>
       </Grid>
-      <Grid container spacing={2} className = "centerDiv">
+      <Grid container spacing={2} className="centerDiv">
         <Grid size={6}>
           <TextInput
             label="State"
@@ -185,7 +186,7 @@ const onUpdate = async () => {
             type="text"
             placeholder="State"
             value={state}
-            onChange={(e)=>onChangeState(e)}
+            onChange={(e) => onChangeState(e)}
             id="State"
           />
         </Grid>
@@ -196,12 +197,12 @@ const onUpdate = async () => {
             type="text"
             placeholder="Postal Code"
             value={postalCode}
-            onChange={(e)=>onChangePostalCode(e)}
+            onChange={(e) => onChangePostalCode(e)}
             id="postalCode"
           />
         </Grid>
       </Grid>
-      <Grid container spacing={2} className = "centerDiv">
+      <Grid container spacing={2} className="centerDiv">
         <Grid size={6}>
           <TextInput
             label="Country"
@@ -209,7 +210,7 @@ const onUpdate = async () => {
             type="text"
             placeholder="Country"
             value={country}
-            onChange={(e)=>onChangeCountry(e)}
+            onChange={(e) => onChangeCountry(e)}
             id="country"
           />
         </Grid>
@@ -220,12 +221,12 @@ const onUpdate = async () => {
             type="text"
             placeholder="Number of unit"
             value={noOfUnit}
-            onChange={(e)=>onChangeNoOfUnit(e)}
+            onChange={(e) => onChangeNoOfUnit(e)}
             id="numberOfUnit"
           />
         </Grid>
       </Grid>
-      <Grid container spacing={2} className = "centerDiv">
+      <Grid container spacing={2} className="centerDiv">
         <Grid size={6}>
           <TextInput
             label="Monthly Rent Amount"
@@ -233,7 +234,7 @@ const onUpdate = async () => {
             type="text"
             placeholder="Monthly Rent Amount"
             value={monthlyRent}
-            onChange={(e)=>onChangeMonthlyRent(e)}
+            onChange={(e) => onChangeMonthlyRent(e)}
             id="monthlyRentAmount"
           />
         </Grid>
@@ -244,29 +245,31 @@ const onUpdate = async () => {
             type="text"
             placeholder="Rent Due Day"
             value={dueDay}
-            onChange={(e)=>onChangeDueDay(e)}
+            onChange={(e) => onChangeDueDay(e)}
             id="rentDueDay"
           />
         </Grid>
       </Grid>
       <div className="centerDiv">
         <div>
-
-         <Button
-            name="Clear"
-            onClick={()=>onClear()}
-            color="primary"
-            variant="outlined"
-          />
+          {edit ? (
+            <Button
+              name="Clear"
+              onClick={() => onClear()}
+              color="primary"
+              variant="outlined"
+            />
+          ) : (
+            <></>
+          )}
         </div>
-        <div>
-         <Button
-            name={props.edit ?"Update" :"Submit"}
-            onClick={()=>onSubmit()}
+        <div style={{ paddingLeft: "20px" }}>
+          <Button
+            name={edit ? "Update" : "Submit"}
+            onClick={() => onSubmit()}
             color="primary"
             variant="contained"
           />
-
         </div>
       </div>
     </div>

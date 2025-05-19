@@ -79,7 +79,7 @@ export default function Dashboard() {
               </div>
 
               <div className="rounded-xl p-6 shadow-lg text-center text-white bg-gradient-to-r from-purple-500 to-violet-600">
-                <p className="text-lg font-semibold">Rent Due in 7 Days</p>
+                <p className="text-lg font-semibold">Rent Due Properties in 7 Days</p>
                 <p className="text-4xl mt-2 font-bold">{rentDueCount}</p>
               </div>
             </div>

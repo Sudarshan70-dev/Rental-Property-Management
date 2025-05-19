@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
@@ -9,15 +9,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import { useRouter } from "next/navigation";
 
 export default function AddPaymentRecord() {
+    const router = useRouter();
+
   const [paymentDate, setPaymentDate] = useState<Dayjs | null>(dayjs());
   const [paymentAmt, setPaymentAmt] = useState("");
   const [paymentMode, setPaymentMode] = useState("");
   const [properties, setProperties] = useState<any[]>([]);
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>("");
 
-  console.log("add payment record--->")
   useEffect(() => {
     const fetchProperties = async () => {
       const {
@@ -39,15 +41,39 @@ export default function AddPaymentRecord() {
     fetchProperties();
   }, []);
 
-  const propertySelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedId = e.target.value;
-    setSelectedPropertyId(selectedId);
 
-    const selectedProperty = properties.find((p) => p.id === selectedId);
-    if (selectedProperty?.rent) {
-      setPaymentAmt(String(selectedProperty.rent));
-    }
-  };
+const propertySelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const selectedId = e.target.value;
+  setSelectedPropertyId(selectedId);
+
+  const selectedProperty = properties.find((p) => p.id === selectedId);
+  if (!selectedProperty) return;
+
+  const fullRent = selectedProperty.rent;
+
+  // Get current month range
+  const startOfMonth = dayjs().startOf('month').toISOString();
+  const endOfMonth = dayjs().endOf('month').toISOString();
+
+  // Fetch rent payments for this property in current month
+  const { data: payments, error } = await supabase
+    .from('rent_payments')
+    .select('amount')
+    .eq('property_id', selectedId)
+    .gte('payment_date', startOfMonth)
+    .lte('payment_date', endOfMonth);
+
+  if (error) {
+    console.error("Error fetching existing payments:", error.message);
+    return setPaymentAmt(String(fullRent));
+  }
+
+  const totalPaid = payments?.reduce((sum, p) => sum + (p.amount || 0), 0);
+  const remaining = Math.max(fullRent - totalPaid, 0);
+
+  setPaymentAmt(String(remaining));
+};
+
 
   const onSubmit = async () => {
     if (!selectedPropertyId) {
@@ -64,7 +90,7 @@ export default function AddPaymentRecord() {
       },
     ]);
 
-    console.log("error is --> ",error)
+    console.log("error is --> ", error);
     if (error) {
       alert("Failed to save payment: " + error.message);
     } else {
@@ -75,11 +101,19 @@ export default function AddPaymentRecord() {
     }
   };
 
+  const onChangePaymentAmt = (e) => {
+    const input = e.target.value;
+    const value = input.replace(/[^0-9]/g, "");
+    setPaymentAmt(value);
+  };
+
   return (
     <div className="bg-white p-6 rounded-xl shadow-md space-y-6 w-full max-w-5xl">
       <Grid container spacing={2} className="centerDiv">
         <Grid item xs={6}>
-          <label className="block text-sm mb-1 font-medium">Select Property</label>
+          <label className="block text-sm mb-1 font-medium">
+            Select Property
+          </label>
           <select
             value={selectedPropertyId}
             onChange={propertySelect}
@@ -119,7 +153,7 @@ export default function AddPaymentRecord() {
             type="text"
             placeholder="Amount"
             value={paymentAmt}
-            onChange={(e) => setPaymentAmt(e.target.value)}
+            onChange={(e) => onChangePaymentAmt(e)}
             id="paymentAmt"
           />
         </Grid>
@@ -138,12 +172,24 @@ export default function AddPaymentRecord() {
       </Grid>
 
       <div className="centerDiv">
+      <div>
+        <Button
+          name="Back"
+          onClick={()=>
+            router.push("/property")
+          }
+          color="primary"
+          variant="outlined"
+        />
+      </div>
+      <div style={{paddingLeft:"20px"}}>
         <Button
           name="Add Record"
           onClick={onSubmit}
           color="primary"
           variant="contained"
         />
+      </div>
       </div>
     </div>
   );

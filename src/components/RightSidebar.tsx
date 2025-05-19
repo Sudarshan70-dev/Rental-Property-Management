@@ -1,4 +1,3 @@
-// src/components/LeftSidebar.tsx
 'use client';
 
 import Link from 'next/link';
@@ -20,7 +19,7 @@ export default function LeftSidebar() {
     <aside className="w-64 h-screen sticky top-0 bg-[#141A39] p-6 text-white shadow-lg">
       <nav className="flex flex-col gap-2">
         {links.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href;
+          const isActive = pathname.startsWith(href); // ✅ fix here
           return (
             <Link
               key={href}

@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 type PaymentRecord = {
   id: string;
   amount: number;
-  method: string;
+  mode: string;
   payment_date: string;
   property: {
     address: string;
@@ -71,7 +71,7 @@ export default function PaymentHistory() {
                   <td className="px-4 py-3 text-gray-700">
                     {dayjs(item.payment_date).format('MMMM D, YYYY')}
                   </td>
-                  <td className="px-4 py-3 text-gray-700">${item.amount}</td>
+                  <td className="px-4 py-3 text-gray-700">Rs {item.amount}</td>
                   <td className="px-4 py-3 text-gray-700">{item.mode}</td>
                 </tr>
               ))}
