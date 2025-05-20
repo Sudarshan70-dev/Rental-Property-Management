@@ -8,7 +8,7 @@ const LoginPage = dynamic(() => import('@/components/LoginPage'), {
 });
 export default function Login() {
   return (
-    <div className="p-6">
+    <div className="hw100">
 
       <LoginPage/>
     </div>

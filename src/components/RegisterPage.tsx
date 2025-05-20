@@ -110,7 +110,7 @@ if (sessionError || !session || !session.user) {
 
 
   return (
-    <div className="hw100 centerDiv">
+    <div className="hw100 centerDiv min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#141A39] to-[#1E215D] p-4">
         <Box sx={{
             display:"flex",
             height:"70%",
@@ -121,7 +121,9 @@ if (sessionError || !session || !session.user) {
 
       <div className="mt-4 text-center">
         <div>
-            <h1 className="heading">Register</h1>
+            <h1 className="heading">Rental Property Tracking</h1>
+
+            <h2 className="heading">Register</h2>
           <TextInput
             label="Full Name"
             name="Full Name"

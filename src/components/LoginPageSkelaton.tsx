@@ -8,7 +8,7 @@ export default function LoginPageSkeleton() {
         <h1 className="text-4xl font-bold text-gray-800 mb-4">
           Rental Property Tracker
         </h1>
-        <p className="text-gray-500 text-lg">Loading login interface...</p>
+        <p className="text-gray-500 text-lg">Loading...</p>
         <div className="mt-6">
           <div className="w-80 h-10 bg-gray-300 rounded mb-4" />
           <div className="w-80 h-10 bg-gray-300 rounded mb-4" />

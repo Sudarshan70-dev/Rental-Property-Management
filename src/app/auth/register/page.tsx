@@ -9,7 +9,7 @@ const RegisterPage = dynamic(() => import('@/components/RegisterPage'), {
 });
 export default function CreatePropertyPage() {
   return (
-    <div className="p-6">
+    <div className="hw100">
 
       <RegisterPage/>
     </div>

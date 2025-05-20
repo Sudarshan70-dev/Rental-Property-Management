@@ -47,7 +47,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="hw100 centerDiv">
+    <div className="hw100 centerDiv min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#141A39] to-[#1E215D] p-4">
       <Box
         sx={{
           display: "flex",
@@ -57,7 +57,8 @@ export default function LoginPage() {
       >
         <Paper elevation={3} sx={{ padding: "20px", borderRadius: "22px" }}>
           <div className="mt-4 text-center">
-            <h1 className="heading">Login</h1>
+            <h1 className="heading">Rental Property Tracking</h1>
+            <h2 className="heading">Login</h2>
 
             <TextInput
               label="Email"
